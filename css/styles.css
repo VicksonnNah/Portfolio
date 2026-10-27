@@ -5,6 +5,7 @@
   --space: #020617;
 }
 
+html { scroll-behavior: smooth; }
 * { box-sizing: border-box; }
 body { font-family: 'Space Grotesk', sans-serif; background: var(--space); color: #e2e8f0; }
 h1, h2, h3, .tech { font-family: 'Orbitron', sans-serif; }
