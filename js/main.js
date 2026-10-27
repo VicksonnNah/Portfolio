@@ -1,11 +1,276 @@
-// Animated starfield
-(()=>{const c=document.getElementById('stars'),x=c.getContext('2d');let w,h,dpr,stars=[];function size(){dpr=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(dpr,0,0,dpr,0,0);stars=Array.from({length:Math.min(180,Math.floor(w*h/7500))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.4+.25,v:Math.random()*.26+.04,a:Math.random()*.7+.2}))}function draw(){x.clearRect(0,0,w,h);for(const s of stars){s.y-=s.v;if(s.y<0){s.y=h;s.x=Math.random()*w}x.globalAlpha=s.a*(.65+.35*Math.sin(Date.now()*.001+s.x));x.fillStyle='#b9f5ff';x.beginPath();x.arc(s.x,s.y,s.r,0,Math.PI*2);x.fill()}requestAnimationFrame(draw)}addEventListener('resize',size);size();draw()})();
+// Animated starfield background.
+(() => {
+  const canvas = document.getElementById('stars');
+  if (!canvas) return;
+  const context = canvas.getContext('2d');
+  let width = 0;
+  let height = 0;
+  let ratio = 1;
+  let stars = [];
 
-document.querySelectorAll('.filter').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.skill').forEach(s=>s.hidden=!(b.dataset.filter==='all'||s.dataset.cat===b.dataset.filter))}));document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{const out=document.getElementById('copy-status');try{await navigator.clipboard.writeText(b.dataset.copy);out.textContent='Copied to clipboard.'}catch{out.textContent='Clipboard unavailable. Select and copy: '+b.dataset.copy}}));document.getElementById('year').textContent=new Date().getFullYear();
-// Interactive banner tilt
-const hero=document.querySelector('.hero'),heroTitle=hero.querySelector('h1');hero.addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;heroTitle.style.transform=`perspective(800px) rotateY(${px*8}deg) rotateX(${-py*6}deg)`;hero.style.setProperty('--mx',`${e.clientX-r.left}px`);hero.style.setProperty('--my',`${e.clientY-r.top}px`)});hero.addEventListener('mouseleave',()=>heroTitle.style.transform='');
-// Fetch public repositories from GitHub and allow category filtering.
-const repoBox=document.getElementById('repos');let repoItems=[];
-function renderRepos(filter){const rows=repoItems.filter(r=>filter==='all'||r.tag===filter);repoBox.innerHTML=rows.length?rows.map(r=>`<a class="panel card rounded-xl p-5" href="${r.url}" target="_blank" rel="noreferrer"><p class="tech text-xs text-cyan-300">${r.language||'Code'}</p><h3 class="mt-3 text-base text-white">${r.name} ↗</h3><p class="mt-2 text-sm text-slate-400">${r.description||'Project repository on GitHub.'}</p></a>`).join(''):"<p class='text-sm text-slate-400'>No repositories match this filter.</p>"}
-fetch('https://api.github.com/users/VicksonnNah/repos?per_page=100&sort=updated').then(r=>{if(!r.ok)throw Error('GitHub unavailable');return r.json()}).then(data=>{repoItems=data.filter(r=>!r.fork).slice(0,12).map(r=>{const l=(r.language||'').toLowerCase();return{name:r.name,url:r.html_url,description:r.description,language:r.language,tag:l==='python'?'python':['html','javascript','typescript','css'].includes(l)?'web':['c','c++','shell','powershell'].includes(l)?'networking':'other'}});renderRepos('all')}).catch(()=>{repoBox.innerHTML="<a class='panel card rounded-xl p-5' href='https://github.com/VicksonnNah' target='_blank' rel='noreferrer'><p class='tech text-xs text-cyan-300'>GITHUB PROFILE</p><h3 class='mt-3 text-base text-white'>Explore my repositories ↗</h3><p class='mt-2 text-sm text-slate-400'>Open GitHub to browse current projects.</p></a>"});
-document.querySelectorAll('.repo-filter').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.repo-filter').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderRepos(b.dataset.filter)}));
+  function resize() {
+    ratio = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * ratio;
+    canvas.height = height * ratio;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    stars = Array.from({ length: Math.min(180, Math.floor(width * height / 7500)) }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.4 + 0.25,
+      speed: Math.random() * 0.26 + 0.04,
+      alpha: Math.random() * 0.7 + 0.2,
+    }));
+  }
+
+  function draw() {
+    context.clearRect(0, 0, width, height);
+    for (const star of stars) {
+      star.y -= star.speed;
+      if (star.y < 0) {
+        star.y = height;
+        star.x = Math.random() * width;
+      }
+      context.globalAlpha = star.alpha * (0.65 + 0.35 * Math.sin(Date.now() * 0.001 + star.x));
+      context.fillStyle = '#b9f5ff';
+      context.beginPath();
+      context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.globalAlpha = 1;
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+})();
+
+const year = document.getElementById('year');
+if (year) year.textContent = new Date().getFullYear();
+
+// Cursor tilt and glow on the hero banner.
+const hero = document.querySelector('.hero');
+const heroTitle = hero?.querySelector('h1');
+if (hero && heroTitle) {
+  hero.addEventListener('pointermove', (event) => {
+    if (event.pointerType === 'touch') return;
+    const bounds = hero.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    const rotateY = x * 8;
+    const rotateX = y * -6;
+    heroTitle.style.transform = `perspective(800px) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+    hero.style.setProperty('--mx', `${event.clientX - bounds.left}px`);
+    hero.style.setProperty('--my', `${event.clientY - bounds.top}px`);
+  });
+  hero.addEventListener('pointerleave', () => { heroTitle.style.transform = ''; });
+}
+
+// Copy contact details.
+document.querySelectorAll('.copy').forEach((button) => {
+  button.addEventListener('click', async () => {
+    const output = document.getElementById('copy-status');
+    try {
+      await navigator.clipboard.writeText(button.dataset.copy);
+      output.textContent = 'Copied to clipboard.';
+    } catch {
+      output.textContent = `Clipboard unavailable. Select and copy: ${button.dataset.copy}`;
+    }
+  });
+});
+
+// GitHub project carousel.
+const carousel = document.getElementById('project-carousel');
+const track = document.getElementById('repos');
+const dots = document.getElementById('carousel-dots');
+const previous = carousel?.querySelector('.carousel-prev');
+const next = carousel?.querySelector('.carousel-next');
+const profileUrl = 'https://github.com/VicksonnNah';
+let projects = [];
+let activeSlide = 0;
+let pointerStartX = null;
+let hovered = false;
+let focused = false;
+let suppressSlideClick = false;
+
+function getTags(project) {
+  const language = project.language || 'Code';
+  const lower = language.toLowerCase();
+  const category = lower === 'python' ? 'Python' :
+    ['html', 'javascript', 'typescript', 'css'].includes(lower) ? 'Web Development' :
+    ['c', 'c++', 'shell', 'powershell'].includes(lower) ? 'Networking' : 'Software';
+  return [...new Set([language, category])];
+}
+
+function updateCarousel() {
+  if (!track || !dots || !projects.length) return;
+  const previousIndex = (activeSlide - 1 + projects.length) % projects.length;
+  const nextIndex = (activeSlide + 1) % projects.length;
+  [...track.children].forEach((slide, index) => {
+    slide.classList.remove('slide-active', 'slide-prev', 'slide-next', 'slide-hidden', 'slide-hidden-right');
+    if (index === activeSlide) {
+      slide.classList.add('slide-active');
+      slide.inert = false;
+    } else if (index === previousIndex) {
+      slide.classList.add('slide-prev');
+      slide.inert = false;
+    } else if (index === nextIndex) {
+      slide.classList.add('slide-next');
+      slide.inert = false;
+    } else {
+      slide.classList.add('slide-hidden');
+      slide.inert = true;
+      const distance = (index - activeSlide + projects.length) % projects.length;
+      if (distance < projects.length / 2) slide.classList.add('slide-hidden-right');
+      slide.setAttribute('aria-hidden', 'true');
+    }
+    if (index === activeSlide || index === previousIndex || index === nextIndex) {
+      slide.removeAttribute('aria-hidden');
+    }
+  });
+  [...dots.children].forEach((dot, index) => {
+    const selected = index === activeSlide;
+    dot.classList.toggle('is-active', selected);
+    dot.setAttribute('aria-selected', String(selected));
+  });
+}
+
+function renderCarousel() {
+  if (!track || !dots || !projects.length) return;
+  activeSlide = Math.min(activeSlide, projects.length - 1);
+  track.replaceChildren();
+  dots.replaceChildren();
+
+  projects.forEach((project, index) => {
+    const slide = document.createElement('article');
+    slide.className = 'project-slide panel';
+    slide.setAttribute('role', 'group');
+    slide.setAttribute('aria-roledescription', 'slide');
+    slide.setAttribute('aria-label', `${index + 1} of ${projects.length}`);
+
+    const language = document.createElement('p');
+    language.className = 'tech project-language';
+    language.textContent = project.language || 'GITHUB PROJECT';
+    const title = document.createElement('h3');
+    title.textContent = project.name;
+    const description = document.createElement('p');
+    description.textContent = project.description || 'Project repository on GitHub.';
+    const tags = document.createElement('div');
+    tags.className = 'project-tags';
+    getTags(project).forEach((tag) => {
+      const chip = document.createElement('span');
+      chip.textContent = tag;
+      tags.append(chip);
+    });
+    const link = document.createElement('a');
+    link.className = 'project-link';
+    link.href = profileUrl;
+    link.target = '_blank';
+    link.rel = 'noreferrer';
+    link.append(document.createTextNode('Explore GitHub '));
+    const arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '\u2197';
+    link.append(arrow);
+    slide.append(language, title, description, tags, link);
+    slide.addEventListener('click', (event) => {
+      if (suppressSlideClick) {
+        suppressSlideClick = false;
+        event.preventDefault();
+        return;
+      }
+      if (event.target.closest('a, button')) return;
+      if (slide.classList.contains('slide-prev') || slide.classList.contains('slide-next')) {
+        activeSlide = index;
+        updateCarousel();
+      }
+    });
+    track.append(slide);
+
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'carousel-dot';
+    dot.setAttribute('role', 'tab');
+    dot.setAttribute('aria-label', `Show project ${index + 1}: ${project.name}`);
+    dot.setAttribute('aria-controls', 'repos');
+    dot.addEventListener('click', () => { activeSlide = index; updateCarousel(); });
+    dots.append(dot);
+  });
+  updateCarousel();
+}
+
+function stepCarousel(direction) {
+  if (!projects.length) return;
+  activeSlide = (activeSlide + direction + projects.length) % projects.length;
+  updateCarousel();
+}
+
+previous?.addEventListener('click', () => stepCarousel(-1));
+next?.addEventListener('click', () => stepCarousel(1));
+carousel?.addEventListener('mouseenter', () => { hovered = true; });
+carousel?.addEventListener('mouseleave', () => { hovered = false; });
+carousel?.addEventListener('focusin', () => { focused = true; });
+carousel?.addEventListener('focusout', (event) => {
+  if (!carousel.contains(event.relatedTarget)) focused = false;
+});
+carousel?.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowLeft') { event.preventDefault(); stepCarousel(-1); }
+  if (event.key === 'ArrowRight') { event.preventDefault(); stepCarousel(1); }
+});
+carousel?.addEventListener('pointerdown', (event) => {
+  if (event.pointerType === 'mouse') return;
+  pointerStartX = event.clientX;
+});
+carousel?.addEventListener('pointerup', (event) => {
+  if (pointerStartX === null) return;
+  const distance = event.clientX - pointerStartX;
+  if (Math.abs(distance) > 45) {
+    suppressSlideClick = true;
+    stepCarousel(distance < 0 ? 1 : -1);
+    window.setTimeout(() => { suppressSlideClick = false; }, 400);
+  }
+  pointerStartX = null;
+});
+carousel?.addEventListener('pointercancel', () => { pointerStartX = null; });
+
+if (carousel && track) {
+  projects = [{
+    name: 'Explore my repositories',
+    description: 'Visit my GitHub profile to browse current projects and code.',
+    language: 'GITHUB PROFILE',
+  }];
+  renderCarousel();
+  window.setInterval(() => {
+    if (!hovered && !focused && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) stepCarousel(1);
+  }, 5000);
+
+  fetch('https://api.github.com/users/VicksonnNah/repos?per_page=100&sort=updated')
+    .then((response) => {
+      if (!response.ok) throw new Error('GitHub unavailable');
+      return response.json();
+    })
+    .then((repositories) => {
+      const publicProjects = repositories.filter((repository) => !repository.fork).slice(0, 12);
+      if (!publicProjects.length) return;
+      projects = publicProjects.map((repository) => ({
+        name: repository.name,
+        description: repository.description,
+        language: repository.language,
+      }));
+      activeSlide = 0;
+      renderCarousel();
+    })
+    .catch(() => {
+      projects = [{
+        name: 'Explore my repositories',
+        description: 'GitHub could not be reached right now. Visit my profile to browse current projects.',
+        language: 'GITHUB PROFILE',
+      }];
+      activeSlide = 0;
+      renderCarousel();
+    });
+}
