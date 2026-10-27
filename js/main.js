@@ -52,6 +52,43 @@
 const year = document.getElementById('year');
 if (year) year.textContent = new Date().getFullYear();
 
+const launchMission = document.querySelector('.hero a[href="#gate"]');
+function animateScrollTo(target, duration = 900) {
+  const root = document.documentElement;
+  const body = document.body;
+  const savedRootBehavior = [root.style.getPropertyValue('scroll-behavior'), root.style.getPropertyPriority('scroll-behavior')];
+  const savedBodyBehavior = [body.style.getPropertyValue('scroll-behavior'), body.style.getPropertyPriority('scroll-behavior')];
+  const startY = window.scrollY;
+  const endY = startY + target.getBoundingClientRect().top;
+  const startTime = performance.now();
+
+  root.style.setProperty('scroll-behavior', 'auto', 'important');
+  body.style.setProperty('scroll-behavior', 'auto', 'important');
+
+  function tick(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    window.scrollTo(0, startY + (endY - startY) * eased);
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+      return;
+    }
+    if (savedRootBehavior[0]) root.style.setProperty('scroll-behavior', savedRootBehavior[0], savedRootBehavior[1]);
+    else root.style.removeProperty('scroll-behavior');
+    if (savedBodyBehavior[0]) body.style.setProperty('scroll-behavior', savedBodyBehavior[0], savedBodyBehavior[1]);
+    else body.style.removeProperty('scroll-behavior');
+  }
+
+  requestAnimationFrame(tick);
+}
+launchMission?.addEventListener('click', (event) => {
+  const gate = document.getElementById('gate');
+  if (!gate) return;
+  event.preventDefault();
+  history.pushState(null, '', '#gate');
+  animateScrollTo(gate);
+});
+
 // Cursor tilt and glow on the hero banner.
 const hero = document.querySelector('.hero');
 const heroTitle = hero?.querySelector('h1');
@@ -222,10 +259,14 @@ carousel?.addEventListener('keydown', (event) => {
   if (event.key === 'ArrowRight') { event.preventDefault(); stepCarousel(1); }
 });
 carousel?.addEventListener('pointerdown', (event) => {
-  if (event.pointerType === 'mouse') return;
+  if (event.pointerType === 'mouse') {
+    pointerStartX = null;
+    return;
+  }
   pointerStartX = event.clientX;
 });
 carousel?.addEventListener('pointerup', (event) => {
+  if (event.pointerType === 'mouse') return;
   if (pointerStartX === null) return;
   const distance = event.clientX - pointerStartX;
   if (Math.abs(distance) > 45) {
