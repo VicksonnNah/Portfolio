@@ -127,6 +127,32 @@ const dots = document.getElementById('carousel-dots');
 const previous = carousel?.querySelector('.carousel-prev');
 const next = carousel?.querySelector('.carousel-next');
 const profileUrl = 'https://github.com/VicksonnNah';
+const featuredProjects = [
+  {
+    name: 'Covid Tracker',
+    description: 'A web app for tracking COVID-19 information.',
+    language: 'WEB PROJECT',
+    tags: ['HTML', 'JavaScript', 'Web Development'],
+    featured: true,
+    siteUrl: 'https://vicksonnnah.github.io/CovidTracker/',
+  },
+  {
+    name: 'Spotify Clone',
+    description: 'A Spotify-inspired music app built with Supabase.',
+    language: 'WEB PROJECT',
+    tags: ['JavaScript', 'Supabase', 'Web Development'],
+    featured: true,
+    siteUrl: 'https://spoitfy-clone-with-supabase.vercel.app/login',
+  },
+  {
+    name: 'Bus App',
+    description: 'A web app for exploring bus information and services.',
+    language: 'WEB PROJECT',
+    tags: ['HTML', 'JavaScript', 'Web Development'],
+    featured: true,
+    siteUrl: 'https://vicksonnnah.github.io/BusApp/',
+  },
+];
 let projects = [];
 let activeSlide = 0;
 let pointerStartX = null;
@@ -185,6 +211,7 @@ function renderCarousel() {
   projects.forEach((project, index) => {
     const slide = document.createElement('article');
     slide.className = 'project-slide panel';
+    if (project.featured) slide.classList.add('featured-project');
     slide.setAttribute('role', 'group');
     slide.setAttribute('aria-roledescription', 'slide');
     slide.setAttribute('aria-label', `${index + 1} of ${projects.length}`);
@@ -192,23 +219,29 @@ function renderCarousel() {
     const language = document.createElement('p');
     language.className = 'tech project-language';
     language.textContent = project.language || 'GITHUB PROJECT';
+    if (project.featured) {
+      const badge = document.createElement('span');
+      badge.className = 'project-featured';
+      badge.innerHTML = '<span aria-hidden="true">★</span> Featured';
+      slide.append(badge);
+    }
     const title = document.createElement('h3');
     title.textContent = project.name;
     const description = document.createElement('p');
     description.textContent = project.description || 'Project repository on GitHub.';
     const tags = document.createElement('div');
     tags.className = 'project-tags';
-    getTags(project).forEach((tag) => {
+    (project.tags || getTags(project)).forEach((tag) => {
       const chip = document.createElement('span');
       chip.textContent = tag;
       tags.append(chip);
     });
     const link = document.createElement('a');
     link.className = 'project-link';
-    link.href = profileUrl;
+    link.href = project.siteUrl || profileUrl;
     link.target = '_blank';
     link.rel = 'noreferrer';
-    link.append(document.createTextNode('Explore GitHub '));
+    link.append(document.createTextNode(project.siteUrl ? 'Visit site ' : 'Explore GitHub '));
     const arrow = document.createElement('span');
     arrow.setAttribute('aria-hidden', 'true');
     arrow.textContent = '\u2197';
@@ -279,7 +312,7 @@ carousel?.addEventListener('pointerup', (event) => {
 carousel?.addEventListener('pointercancel', () => { pointerStartX = null; });
 
 if (carousel && track) {
-  projects = [{
+  projects = [...featuredProjects, {
     name: 'Explore my repositories',
     description: 'Visit my GitHub profile to browse current projects and code.',
     language: 'GITHUB PROFILE',
@@ -295,18 +328,25 @@ if (carousel && track) {
       return response.json();
     })
     .then((repositories) => {
-      const publicProjects = repositories.filter((repository) => !repository.fork).slice(0, 12);
+      const excludedRepositoryName = /lesson|module|devasc|portfolio|\bl20\b|\bc237\b|c237_l12app|\b[a-z]{1,4}\d{3,4}\b/i;
+      const publicProjects = repositories
+        .filter((repository) => !repository.fork && !excludedRepositoryName.test(repository.name))
+        .slice(0, 12);
       if (!publicProjects.length) return;
-      projects = publicProjects.map((repository) => ({
+      const normalizeProjectName = (name) => name.replace(/[^a-z0-9]/gi, '').toLowerCase();
+      const featuredNames = new Set(featuredProjects.map((project) => normalizeProjectName(project.name)));
+      projects = [...featuredProjects, ...publicProjects
+        .filter((repository) => !featuredNames.has(normalizeProjectName(repository.name)))
+        .map((repository) => ({
         name: repository.name,
         description: repository.description,
         language: repository.language,
-      }));
+      }))];
       activeSlide = 0;
       renderCarousel();
     })
     .catch(() => {
-      projects = [{
+      projects = [...featuredProjects, {
         name: 'Explore my repositories',
         description: 'GitHub could not be reached right now. Visit my profile to browse current projects.',
         language: 'GITHUB PROFILE',

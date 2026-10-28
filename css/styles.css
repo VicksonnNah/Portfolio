@@ -13,6 +13,7 @@ h1, h2, h3, .tech { font-family: 'Orbitron', sans-serif; }
 .panel { background: linear-gradient(145deg, #0f172acc, #111827aa); border: 1px solid #334155; box-shadow: 0 0 30px #06b6d41a, inset 0 1px #ffffff08; }
 .card { transition: transform .25s, border-color .25s, box-shadow .25s; }
 .card:hover { transform: translateY(-5px); border-color: var(--cyan); box-shadow: 0 12px 40px #06b6d426; }
+.gpa-badge { border: 1px solid #22d3ee88; color: #a5f3fc; background: linear-gradient(135deg, #083344cc, #0f172bcc); box-shadow: 0 0 16px #22d3ee44, inset 0 1px #ffffff12; text-shadow: 0 0 10px #22d3ee88; }
 .grid-bg { background-image: linear-gradient(#33415522 1px, transparent 1px), linear-gradient(90deg, #33415522 1px, transparent 1px); background-size: 48px 48px; }
 #stars { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: .55; }
 .content { position: relative; z-index: 1; }
@@ -22,6 +23,9 @@ h1, h2, h3, .tech { font-family: 'Orbitron', sans-serif; }
 .hero-copy > * { position: relative; z-index: 1; }
 .hero-social .social-link { border-color: #94a3b888; background-color: #02061799; transition: border-color .2s, box-shadow .2s, transform .2s, background-color .2s; }
 .hero-social .social-link:hover { border-color: #67e8f9; background-color: #083344cc; box-shadow: 0 0 18px #22d3ee55; transform: translateY(-2px); }
+.hero-social .resume-download { display: inline-flex; align-items: center; gap: .55rem; border-color: #22d3ee99; color: #cffafe; background: linear-gradient(135deg, #0f172be8, #0c2434d9); box-shadow: inset 0 1px #ffffff12, 0 0 14px #22d3ee1c; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.hero-social .resume-download svg { width: 1rem; height: 1rem; }
+.hero-social .resume-download:hover { border-color: #67e8f9; color: #ecfeff; background: linear-gradient(135deg, #123047f2, #083344e8); box-shadow: 0 0 22px #22d3ee66, inset 0 1px #ffffff20; transform: translateY(-3px); }
 .hero:after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), #22d3ee1c, transparent 70%); }
 .hero h1 { position: relative; z-index: 1; transition: transform .18s ease-out; letter-spacing: .035em; animation: letterPulse 5s ease-in-out infinite alternate; background: linear-gradient(100deg, #fff, #a5f3fc 45%, #c4b5fd); background-clip: text; -webkit-background-clip: text; color: transparent; text-shadow: 0 0 25px rgb(6 182 212 / 50%); filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .9)); }
 .hero-subtitle { text-shadow: 0 4px 12px rgba(0, 0, 0, .9), 0 0 25px rgb(6 182 212 / 50%); filter: drop-shadow(0 4px 12px rgba(0, 0, 0, .9)); }
@@ -51,6 +55,9 @@ h1, h2, h3, .tech { font-family: 'Orbitron', sans-serif; }
 .carousel-track, #repos { position: relative; width: 100%; min-height: 350px; transform-style: preserve-3d; }
 #repos { perspective: 1000px; }
 .project-slide { position: absolute; top: 0; left: 17%; width: 66%; height: 100%; min-height: 310px; padding: clamp(1.4rem, 4vw, 2.5rem); border-radius: .8rem; background: radial-gradient(ellipse at 85% 0%, #164e6380, #0b1225 70%); display: flex; flex-direction: column; align-items: flex-start; cursor: default; transition: transform 0.6s ease, opacity 0.5s ease, box-shadow .5s cubic-bezier(.4, 0, .2, 1), border-color .5s cubic-bezier(.4, 0, .2, 1); transform-style: preserve-3d; backface-visibility: hidden; }
+.project-featured { position: absolute; top: .8rem; left: .8rem; display: inline-flex; align-items: center; gap: .35rem; padding: .35rem .65rem; border: 1px solid #fbbf24aa; border-radius: 999px; color: #fde68a; background: #78350f99; box-shadow: 0 0 16px #f59e0b33; font: 600 .65rem 'Orbitron', sans-serif; letter-spacing: .06em; }
+.project-featured span { color: #fbbf24; }
+.project-slide.featured-project .project-language { margin-top: 1.5rem; }
 .project-slide.slide-active { opacity: 1; cursor: default; pointer-events: auto; transform: translateX(0) scale(1) rotateY(0deg) translateZ(0); border-color: #67e8f9; box-shadow: 0 0 12px #22d3ee88, 0 0 36px #22d3ee44, inset 0 0 24px #22d3ee12; }
 .project-slide.slide-prev { opacity: .48; pointer-events: auto; cursor: pointer; transform: translateX(-47%) scale(.85) rotateY(18deg) translateZ(-100px); }
 .project-slide.slide-next { opacity: .48; pointer-events: auto; cursor: pointer; transform: translateX(47%) scale(.85) rotateY(-18deg) translateZ(-100px); }

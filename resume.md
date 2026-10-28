@@ -15,8 +15,8 @@ Demonstrated a strong foundation in IT Systems and Networking through education 
 
 ## Education
 
-**Diploma in IT** | Republic Polytechnic  
-*Major:* Infocomm Technology  
+**Diploma in Information Technology** | Republic Polytechnic  
+*Major:* Full Stack Development | **cGPA:** 3.5 (Yr 1 & 2)  
 *Duration:* 2025 – 2028  
 
 **Higher Nitec** | Institute of Technical Education  
@@ -31,31 +31,34 @@ Demonstrated a strong foundation in IT Systems and Networking through education 
 ## Skills
 
 ### Technical Skills
-* **Programming Languages:** Python
-* **Web Technologies:** HTML, Web Development Technologies
-* **Database Management:** SQL
-* **Systems & Infrastructure:** Linux, Cloud Computing, Network & Security Administration
-* **Quality & Assurance:** Testing & Quality Assurance
+* **Technical & Full Stack Development:** Front-End (HTML5, CSS3, JavaScript, TypeScript); UI/UX Design & Prototyping; Back-End & DB (Python, SQL, Database Systems, Software Application Development)
+* **Cloud, Systems & Quality Assurance:** Linux; Cloud Application Development; Operating Systems & Networking; DevOps Essentials; Software Testing & QA; IT Security & Management; AI Essentials & Prompt Engineering; Data Analytics
 
-### Organizational & Administrative Skills
-* Problem-Solving & Follow-Up
-* Time Management & Coordination
-* Attention to Detail & Record Keeping
-* Communication & Customer Service
-* Administrative Support & Packing
+### Professional & Interpersonal Skills (Soft Skills)
+* Problem-Solving & Root-Cause Analysis
+* Technical Agility & Adaptive Learning
+* Effective Communication & Customer Service
+* Empathy & Inclusive Training (Volunteering)
+* Patience & Rapport Building
+
+### Operational & Administrative Strengths
+* Time Management & Multitasking under Pressure
+* Quality Control & High-Accuracy Fulfillment
+* Task Coordination & Attention to Detail
+* Record Keeping & Administrative Support
 
 ---
 
 ## Work Experience
 
-### Call Picker | Alphaeus (Changi Business District)
+### L1 Technical Support | Alphaeus (Changi Business District)
 *Nov 2023 – Jul 2024*
 
 * Identified and resolved a recurring root-cause issue for Microsoft account inquiries that previously suffered from high escalation rates and inconsistent handling.
 * Developed and validated a new troubleshooting protocol through iterative testing, significantly increasing first-call resolution for the team.
 * Demonstrated technical agility by diagnosing complex user account issues and providing clear, actionable solutions under performance KPIs.
 
-### Picker | NTUC FairPrice (Singapore, Singapore)
+### Online Grocery Picker | NTUC FairPrice (Singapore, Singapore)
 *Jul 2022 – Aug 2022*
 
 * Executed high-accuracy order fulfillment for a high-volume e-commerce platform, ensuring 100% correctness in item selection and secure packing.
