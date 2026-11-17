@@ -92,6 +92,83 @@ launchMission?.addEventListener('click', (event) => {
 // Cursor tilt and glow on the hero banner.
 const hero = document.querySelector('.hero');
 const heroTitle = hero?.querySelector('h1');
+// Build the hero name from glowing pixels, then disperse those pixels as the
+// visitor scrolls away from the opening screen.
+const pixelCanvas = document.getElementById('title-pixels');
+if (hero && heroTitle && pixelCanvas) {
+  const ctx = pixelCanvas.getContext('2d');
+  const sample = document.createElement('canvas');
+  const sampleCtx = sample.getContext('2d', { willReadFrequently: true });
+  let particles = [];
+  let introStart = performance.now();
+  let framePending = false;
+
+  function buildPixels() {
+    const bounds = heroTitle.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    pixelCanvas.width = Math.ceil(bounds.width * dpr);
+    pixelCanvas.height = Math.ceil(bounds.height * dpr);
+    pixelCanvas.style.width = `${bounds.width}px`;
+    pixelCanvas.style.height = `${bounds.height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    sample.width = Math.ceil(bounds.width);
+    sample.height = Math.ceil(bounds.height);
+    const style = getComputedStyle(heroTitle);
+    sampleCtx.clearRect(0, 0, sample.width, sample.height);
+    sampleCtx.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    sampleCtx.textBaseline = 'top';
+    sampleCtx.fillStyle = '#fff';
+    sampleCtx.fillText('Vickson Nah', 0, 0);
+    const pixels = sampleCtx.getImageData(0, 0, sample.width, sample.height).data;
+    particles = [];
+    const step = 3;
+    for (let y = 0; y < sample.height; y += step) for (let x = 0; x < sample.width; x += step) {
+      if (pixels[(y * sample.width + x) * 4 + 3] > 100) {
+        // Keep the starting cloud inside the canvas. Scattering particles far
+        // beyond its bounds clipped almost all of them, making the effect hard
+        // to see on initial load.
+        particles.push({ x, y, size: 1 + Math.random() * 1.2, delay: Math.random() * .2,
+          sx: Math.random() * bounds.width, sy: Math.random() * bounds.height });
+      }
+    }
+    heroTitle.classList.add('pixel-active');
+    drawPixels();
+  }
+
+  function drawPixels() {
+    framePending = false;
+    const bounds = hero.getBoundingClientRect();
+    const scrollProgress = Math.max(0, Math.min(1, -bounds.top / (bounds.height * .3)));
+    const introProgress = Math.min(1, (performance.now() - introStart) / 1500);
+    const formation = 1 - Math.max(scrollProgress, 1 - introProgress);
+    const ease = formation * formation * (3 - 2 * formation);
+    ctx.clearRect(0, 0, pixelCanvas.width, pixelCanvas.height);
+    for (const p of particles) {
+      const scattered = Math.max(0, Math.min(1, (1 - ease - p.delay) / (1 - p.delay)));
+      const x = p.x + (p.sx - p.x) * scattered;
+      const y = p.y + (p.sy - p.y) * scattered + scrollProgress * (14 + p.delay * 30);
+      ctx.globalAlpha = Math.max(0, 1 - scattered) * (1 - scrollProgress * .75);
+      ctx.fillStyle = p.delay < .34 ? '#a5f3fc' : '#c4b5fd';
+      ctx.shadowColor = '#22d3ee';
+      ctx.shadowBlur = 7;
+      ctx.fillRect(x, y, p.size, p.size);
+    }
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    if (scrollProgress < 1 || introProgress < 1) requestAnimationFrame(() => { framePending = false; drawPixels(); });
+  }
+
+  function requestPixelFrame() {
+    if (!framePending) { framePending = true; requestAnimationFrame(drawPixels); }
+  }
+  window.addEventListener('scroll', requestPixelFrame, { passive: true });
+  window.addEventListener('resize', buildPixels);
+  buildPixels();
+  if (document.fonts?.ready) document.fonts.ready.then(() => {
+    introStart = performance.now();
+    buildPixels();
+  });
+}
 if (hero && heroTitle) {
   hero.addEventListener('pointermove', (event) => {
     if (event.pointerType === 'touch') return;

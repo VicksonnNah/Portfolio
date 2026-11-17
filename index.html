@@ -15,14 +15,27 @@
 <body class="overflow-x-hidden">
 <canvas id="stars" aria-hidden="true"></canvas>
 <div class="content">
-  <header class="hero relative min-h-screen flex items-center overflow-hidden">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="nav-brand tech" href="#top" aria-label="Vickson Nah, home">VN<span aria-hidden="true">//</span></a>
+    <div class="nav-links">
+      <a href="#gate">Checkpoint</a>
+      <a href="#skills">Skills</a>
+      <a href="#experience">Experience</a>
+      <a href="#education">Education</a>
+      <a href="#community">Community</a>
+      <a href="#hangar">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+  <header id="top" class="hero relative min-h-screen flex items-center overflow-hidden">
     <div class="absolute inset-0 grid-bg opacity-20"></div>
     <div class="relative mx-auto w-full max-w-7xl px-6 py-28">
       <div class="hero-copy max-w-3xl">
-        <p class="tech mb-5 text-xs tracking-[.38em] text-cyan-300">PORTFOLIO SYSTEM // ONLINE</p>
-        <h1 class="glow text-5xl font-bold tracking-wide text-white sm:text-7xl lg:text-8xl">Vickson Nah</h1>
-        <p class="hero-subtitle mt-6 text-xl text-slate-200 sm:text-2xl">IT Systems, Networking &amp; Software Developer</p>
-        <p class="mt-5 max-w-xl leading-7 text-slate-300">Building a strong foundation in systems, networks and development&mdash;one mission at a time.</p>
+        <p class="tech mb-5 text-xs tracking-[.38em] text-cyan-300">Welcome to my Web Portfolio!</p>
+        <h1 id="hero-title" class="glow text-5xl leading-none font-bold tracking-wide text-white sm:text-7xl lg:text-8xl">Vickson Nah<canvas id="title-pixels" aria-hidden="true"></canvas></h1>
+        <p class="hero-subtitle mt-3 text-xl text-slate-200 sm:text-2xl">IT Systems, Networking &amp; Full-Stack Developer</p>
+        <p class="mt-5 max-w-xl leading-7 text-slate-300">Building a strong foundation in systems, networks and development&mdash;one step at a time.</p>
         <div class="hero-social mt-8 flex flex-wrap gap-3">
           <a class="rounded-full border border-cyan-400/50 bg-cyan-400/10 px-5 py-2.5 text-sm text-cyan-100 hover:bg-cyan-400/20 social-link" href="https://github.com/VicksonnNah" target="_blank" rel="noreferrer">GitHub &#8599;</a>
           <a class="rounded-full border border-violet-400/50 bg-violet-400/10 px-5 py-2.5 text-sm text-violet-100 hover:bg-violet-400/20 social-link" href="https://www.linkedin.com/in/vickson-nah-095666263" target="_blank" rel="noreferrer">LinkedIn &#8599;</a>
@@ -32,13 +45,13 @@
             Download Resume
           </a>
         </div>
-        <a href="#gate" class="mt-12 inline-flex items-center gap-3 rounded-md bg-cyan-300 px-7 py-4 tech text-xs font-bold tracking-[.18em] text-slate-950 shadow-[0_0_30px_#22d3ee66] transition hover:bg-cyan-200">LAUNCH MISSION <span class="text-lg">&darr;</span></a>
+        <a href="#gate" class="mt-12 inline-flex items-center gap-3 rounded-md bg-cyan-300 px-7 py-4 tech text-xs font-bold tracking-[.18em] text-slate-950 shadow-[0_0_30px_#22d3ee66] transition hover:bg-cyan-200">Start! <span class="text-lg">&darr;</span></a>
       </div>
       <div class="absolute bottom-10 right-8 hidden text-right tech text-[10px] leading-6 tracking-[.2em] text-slate-400 md:block">SECTOR 01 / EARTH<br><span class="text-cyan-300">SYSTEMS &bull; NETWORKS &bull; PEOPLE</span></div>
     </div>
   </header>
 
-  <main>
+  <main id="main-content">
 
 
     <section id="gate" class="section-pad">
